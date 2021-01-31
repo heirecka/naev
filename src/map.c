@@ -985,11 +985,12 @@ void map_renderJumps( double x, double y, int editor)
 {
    int i, j, k;
    const glColour *col, *cole;
-   GLfloat vertex[8*(2+4)];
+   GLfloat vertex[8*(2+4)], lwidth;
    StarSystem *sys, *jsys;
 
    /* Generate smooth lines. */
-   glLineWidth( CLAMP(1., 4., 2. * map_zoom)*gl_screen.scale );
+   lwidth = CLAMP(1., 4., 2. * map_zoom);
+   glLineWidth( lwidth );
 
    for (i=0; i<array_size(systems_stack); i++) {
       sys = system_getIndex( i );

@@ -543,7 +543,7 @@ void ovr_render( double dt )
    if (player_isFlag(PLAYER_AUTONAV) && (player.autonav == AUTONAV_POS_APPROACH)) {
       x = player.autonav_pos.x / res + map_overlay_center_x();
       y = player.autonav_pos.y / res + map_overlay_center_y();
-      gl_renderCross( x, y, 5., &cRadar_hilight );
+      gl_renderCross( x, y, 5., &cRadar_hilight, 1. );
       gl_printMarkerRaw( &gl_smallFont, x+10., y-gl_smallFont.h/2., &cRadar_hilight, _("TARGET") );
    }
 
@@ -578,7 +578,7 @@ static void ovr_mrkRenderAll( double res )
 
       x = mrk->u.pt.x / res + map_overlay_center_x();
       y = mrk->u.pt.y / res + map_overlay_center_y();
-      gl_renderCross( x, y, 5., &cRadar_hilight );
+      gl_renderCross( x, y, 5., &cRadar_hilight, 1. );
 
       if (mrk->text != NULL)
          gl_printMarkerRaw( &gl_smallFont, x+10., y-gl_smallFont.h/2., &cRadar_hilight, mrk->text );

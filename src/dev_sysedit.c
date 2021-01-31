@@ -724,8 +724,8 @@ static void sysedit_renderAsteroidExclusion( double bx, double by, AsteroidExclu
    rr = r * sin(M_PI / 4);
 
    gl_drawCircle( tx, ty, r, &cRed, 0 );
-   gl_renderCross( tx, ty, r, &cRed );
-   gl_renderRectEmpty( tx - rr, ty - rr, rr * 2, rr * 2, &cRed );
+   gl_renderCross( tx, ty, r, &cRed, 1. );
+   gl_renderRectEmpty( tx - rr, ty - rr, rr * 2, rr * 2, &cRed, 1. );
 }
 
 /**
@@ -764,12 +764,12 @@ static void sysedit_renderBG( double bx, double by, double w, double h, double x
    /* Vertical. */
    for ( i = 0; i < nx; i += 1 ) {
       d = startx + ( i * spacing );
-      gl_drawLine( d, by, d, by + h, &cBlue );
+      gl_drawLine( d, by, d, by + h, &cBlue, 1. );
    }
    /* Horizontal. */
    for ( i = 0; i < ny; i += 1 ) {
       d = starty + ( i * spacing );
-      gl_drawLine( bx, d, bx + w, d, &cBlue );
+      gl_drawLine( bx, d, bx + w, d, &cBlue, 1. );
    }
 
    gl_drawCircle( x, y, sysedit_sys->radius * z, &cLightBlue, 0 );

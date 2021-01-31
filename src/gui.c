@@ -723,7 +723,7 @@ static void gui_renderBorder( double dt )
          ccol.b = col->b;
          ccol.a = int_a;
 
-         gl_renderTriangleEmpty( cx, cy, -jp->angle, 10., 1., &ccol );
+         gl_renderTriangleEmpty( cx, cy, -jp->angle, 10., 1., &ccol, 1. );
       }
    }
 
@@ -746,7 +746,7 @@ static void gui_renderBorder( double dt )
          ccol.g = col->g;
          ccol.b = col->b;
          ccol.a = int_a;
-         gl_renderRectEmpty(cx-5, cy-5, 10, 10, &ccol);
+         gl_renderRectEmpty(cx-5, cy-5, 10, 10, &ccol, 1.);
       }
    }
 }
@@ -1355,10 +1355,8 @@ void gui_renderPilot( const Pilot* p, RadarShape shape, double w, double h, doub
       // col = cRadar_hilight;
    col.a = 1.-interference_alpha;
 
-   glLineWidth( 2. );
-   gl_renderTriangleEmpty( x, y, p->solid->dir, scale, 1., &cBlack );
-   glLineWidth( 1. );
-   gl_renderTriangleEmpty( x, y, p->solid->dir, scale, 1., &col );
+   gl_renderTriangleEmpty( x, y, p->solid->dir, scale, 1., &cBlack, 2. );
+   gl_renderTriangleEmpty( x, y, p->solid->dir, scale, 1., &col, 1. );
 
    /* Draw name. */
    if (overlay && pilot_isFlag(p, PILOT_HILIGHT))
@@ -1464,14 +1462,12 @@ void gui_renderPlayer( double res, int overlay )
 
    /* Render the cross. */
    // gl_renderCross( x, y, r, &cRadar_player );
-   glLineWidth( 2. );
-   gl_renderTriangleEmpty( x - 1, y, player.p->solid->dir, r, 2., &cBlack );
-   gl_renderTriangleEmpty( x + 1, y, player.p->solid->dir, r, 2., &cBlack );
-   gl_renderTriangleEmpty( x, y - 1, player.p->solid->dir, r, 2., &cBlack );
-   gl_renderTriangleEmpty( x, y + 1, player.p->solid->dir, r, 2., &cBlack );
+   gl_renderTriangleEmpty( x - 1, y, player.p->solid->dir, r, 2., &cBlack, 2. );
+   gl_renderTriangleEmpty( x + 1, y, player.p->solid->dir, r, 2., &cBlack, 2. );
+   gl_renderTriangleEmpty( x, y - 1, player.p->solid->dir, r, 2., &cBlack, 2. );
+   gl_renderTriangleEmpty( x, y + 1, player.p->solid->dir, r, 2., &cBlack, 2. );
 
-   gl_renderTriangleEmpty( x, y, player.p->solid->dir, r, 2., &cRadar_player );
-   glLineWidth( 1. );
+   gl_renderTriangleEmpty( x, y, player.p->solid->dir, r, 2., &cRadar_player, 2. );
 }
 
 
@@ -1568,7 +1564,7 @@ static void gui_renderRadarOutOfRange( RadarShape sh, int w, int h, int cx, int 
    c = *col;
    c.a = 1.-interference_alpha;
 
-   gl_drawLine( x, y, x2, y2, &c );
+   gl_drawLine( x, y, x2, y2, &c, 1. );
 }
 
 
@@ -1651,17 +1647,16 @@ void gui_renderPlanet( int ind, RadarShape shape, double w, double h, double res
    gl_endSolidProgram();
    */
    gl_drawCircle( cx - 1, cy, vr/2.5, &cBlack, 0 );
-   gl_renderCross( cx - 1, cy, vr/2.5, &cBlack );
+   gl_renderCross( cx - 1, cy, vr/2.5, &cBlack, 1. );
    gl_drawCircle( cx + 1, cy, vr/2.5, &cBlack, 0 );
-   gl_renderCross( cx + 1, cy, vr/2.5, &cBlack );
+   gl_renderCross( cx + 1, cy, vr/2.5, &cBlack, 1. );
    gl_drawCircle( cx, cy - 1, vr/2.5, &cBlack, 0 );
-   gl_renderCross( cx, cy - 1, vr/2.5, &cBlack );
+   gl_renderCross( cx, cy - 1, vr/2.5, &cBlack, 1. );
    gl_drawCircle( cx, cy + 1, vr/2.5, &cBlack, 0 );
-   gl_renderCross( cx, cy + 1, vr/2.5, &cBlack );
+   gl_renderCross( cx, cy + 1, vr/2.5, &cBlack, 1. );
 
    gl_drawCircle( cx, cy, vr/2.5, &col, 0 );
-   gl_renderCross( cx, cy, vr/2.5, &col );
-   //glLineWidth(1.);
+   gl_renderCross( cx, cy, vr/2.5, &col, 1. );
 
    if (overlay) {
       nsnprintf( buf, sizeof(buf), "%s%s", planet_getSymbol(planet), _(planet->name) );
@@ -1750,14 +1745,12 @@ void gui_renderJumpPoint( int ind, RadarShape shape, double w, double h, double 
    if (!overlay)
       col.a = 1.-interference_alpha;
 
-   glLineWidth( 3. );
-   gl_renderTriangleEmpty( cx - 1, cy, -jp->angle, vr, 2., &cBlack );
-   gl_renderTriangleEmpty( cx + 1, cy, -jp->angle, vr, 2., &cBlack );
-   gl_renderTriangleEmpty( cx, cy - 1, -jp->angle, vr, 2., &cBlack );
-   gl_renderTriangleEmpty( cx, cy + 1, -jp->angle, vr, 2., &cBlack );
+   gl_renderTriangleEmpty( cx - 1, cy, -jp->angle, vr, 2., &cBlack, 3. );
+   gl_renderTriangleEmpty( cx + 1, cy, -jp->angle, vr, 2., &cBlack, 3. );
+   gl_renderTriangleEmpty( cx, cy - 1, -jp->angle, vr, 2., &cBlack, 3. );
+   gl_renderTriangleEmpty( cx, cy + 1, -jp->angle, vr, 2., &cBlack, 3. );
 
-   gl_renderTriangleEmpty( cx, cy, -jp->angle, vr, 2., &col );
-   glLineWidth( 1. );
+   gl_renderTriangleEmpty( cx, cy, -jp->angle, vr, 2., &col, 3. );
 
    /* Render name. */
    if (overlay) {

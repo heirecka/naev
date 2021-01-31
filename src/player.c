@@ -984,10 +984,10 @@ void player_render( double dt )
             c.a = .3;
             gl_gameToScreenCoords( &x2, &y2, player.p->solid->pos.x + r*cos( a+theta ),
                                    player.p->solid->pos.y + r*sin( a+theta ) );
-            gl_drawLine( x1, y1, x2, y2, &c );
+            gl_drawLine( x1, y1, x2, y2, &c, 1. );
             gl_gameToScreenCoords( &x2, &y2, player.p->solid->pos.x + r*cos( a-theta ),
                                    player.p->solid->pos.y + r*sin( a-theta ) );
-            gl_drawLine( x1, y1, x2, y2, &c );
+            gl_drawLine( x1, y1, x2, y2, &c, 1. );
 
             c.r = d*.9;
             c.g = d*.2 + (1-d)*.8;
@@ -996,20 +996,20 @@ void player_render( double dt )
             gl_gameToScreenCoords( &x2, &y2, player.p->solid->pos.x + r*cos( a ),
                                    player.p->solid->pos.y + r*sin( a ) );
 
-            gl_drawLine( x1, y1, x2, y2, &c );
+            gl_drawLine( x1, y1, x2, y2, &c, 1. );
 
-            gl_renderCross( x2 - 1, y2 - 1, 6., &cBlack );
-            gl_renderCross( x2 - 1, y2 + 1, 6., &cBlack );
-            gl_renderCross( x2 + 1, y2 - 1, 6., &cBlack );
-            gl_renderCross( x2 + 1, y2 + 1, 6., &cBlack );
-            gl_renderCross( x2, y2, 7., &cBlack );
-            gl_renderCross( x2, y2, 6., &cWhite );
+            gl_renderCross( x2 - 1, y2 - 1, 6., &cBlack, 1. );
+            gl_renderCross( x2 - 1, y2 + 1, 6., &cBlack, 1. );
+            gl_renderCross( x2 + 1, y2 - 1, 6., &cBlack, 1. );
+            gl_renderCross( x2 + 1, y2 + 1, 6., &cBlack, 1. );
+            gl_renderCross( x2, y2, 7., &cBlack, 1. );
+            gl_renderCross( x2, y2, 6., &cWhite, 1. );
 
             gl_gameToScreenCoords( &x2, &y2, player.p->solid->pos.x + r*cos( b ),
                                    player.p->solid->pos.y + r*sin( b ) );
 
             c.a = .4;
-            gl_drawLine( x1, y1, x2, y2, &c );
+            gl_drawLine( x1, y1, x2, y2, &c, 1. );
 
             gl_drawCircle( x2, y2, 8., &cBlack, 0 );
             gl_drawCircle( x2, y2, 10., &cBlack, 0 );

@@ -293,7 +293,7 @@ static int gfxL_renderRect( lua_State *L )
 
    /* Render. */
    if (empty)
-      gl_renderRectEmpty( x, y, w, h, col );
+      gl_renderRectEmpty( x, y, w, h, col, 1. );
    else
       gl_renderRect( x, y, w, h, col );
 

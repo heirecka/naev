@@ -635,6 +635,6 @@ static void shipyard_renderSlotsRow( double bx, double by, double bw, const char
       else if (s[i].slot.spid != 0)
          toolkit_drawTriangle( x, by, x+10, by+10, x, by+10, &cBlack );
 
-      gl_renderRectEmpty( x, by, 10, 10, &cBlack );
+      gl_renderRectEmpty( x, by, 10, 10, &cBlack, 1. );
    }
 }

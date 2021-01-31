@@ -46,9 +46,8 @@
 
 static gl_vbo *gl_renderVBO = 0; /**< VBO for rendering stuff. */
 gl_vbo *gl_squareVBO = 0;
-static gl_vbo *gl_squareEmptyVBO = 0;
-static gl_vbo *gl_crossVBO = 0;
 static gl_vbo *gl_lineVBO = 0;
+static gl_vbo *gl_squareEmptyVBO = 0;
 static gl_vbo *gl_triangleVBO = 0;
 static int gl_renderVBOtexOffset = 0; /**< VBO texture offset. */
 static int gl_renderVBOcolOffset = 0; /**< VBO colour offset. */
@@ -118,26 +117,22 @@ void gl_renderRect( double x, double y, double w, double h, const glColour *c )
 
 
 /**
- * @brief Renders a rectangle.
+ * @brief Renders a rectangle as a wireframe.
  *
  *    @param x X position to render rectangle at.
  *    @param y Y position to render rectangle at.
  *    @param w Rectangle width.
  *    @param h Rectangle height.
  *    @param c Rectangle colour.
+ *    @param thickness Thickness of the lines.
  */
-void gl_renderRectEmpty( double x, double y, double w, double h, const glColour *c )
+void gl_renderRectEmpty( double x, double y, double w, double h, const glColour *c, double thickness )
 {
-   gl_Matrix4 projection;
-
-   projection = gl_view_matrix;
-   projection = gl_Matrix4_Translate(projection, x, y, 0);
-   projection = gl_Matrix4_Scale(projection, w, h, 1);
-
-   gl_beginSolidProgram(projection, c);
-   gl_vboActivateAttribOffset( gl_squareEmptyVBO, shaders.solid.vertex, 0, 2, GL_FLOAT, 0 );
-   glDrawArrays( GL_LINE_STRIP, 0, 5 );
-   gl_endSolidProgram();
+   /* TODO super suboptimal. */
+   gl_drawLine( x,     y,   x,   y, c, thickness );
+   gl_drawLine( x,   y+h,   x, y+h, c, thickness );
+   gl_drawLine( x+w,   y, x+w,   y, c, thickness );
+   gl_drawLine( x+w, y+h, x+w, y+h, c, thickness );
 }
 
 
@@ -148,23 +143,18 @@ void gl_renderRectEmpty( double x, double y, double w, double h, const glColour 
  *    @param y Y position to center at.
  *    @param r Radius of cross.
  *    @param c Colour to use.
+ *    @param thickness Thickness of the lines.
  */
-void gl_renderCross( double x, double y, double r, const glColour *c )
+void gl_renderCross( double x, double y, double r, const glColour *c, double thickness )
 {
-   gl_Matrix4 projection;
-
-   projection = gl_Matrix4_Translate(gl_view_matrix, x, y, 0);
-   projection = gl_Matrix4_Scale(projection, r, r, 1);
-
-   gl_beginSolidProgram(projection, c);
-   gl_vboActivateAttribOffset( gl_crossVBO, shaders.solid.vertex, 0, 2, GL_FLOAT, 0 );
-   glDrawArrays( GL_LINES, 0, 4 );
-   gl_endSolidProgram();
+   /* TODO super suboptimal. */
+   gl_drawLine( x+0, y-r, x+0, y+r, c, thickness );
+   gl_drawLine( x-r, y+0, x+r, y+0, c, thickness );
 }
 
 
 /**
- * @brief Renders a triangle at a given position.
+ * @brief Renders a triangle at a given position as a wrieframe.
  *
  *    @param x X position to center at.
  *    @param y Y position to center at.
@@ -172,10 +162,13 @@ void gl_renderCross( double x, double y, double r, const glColour *c )
  *    @param s Scaling of the triangle.
  *    @param length Length deforming factor. Setting it to a value of other than 1. moves away from an equilateral triangle.
  *    @param c Colour to use.
+ *    @param thickness Thickness of the lines.
  */
-void gl_renderTriangleEmpty( double x, double y, double a, double s, double length, const glColour *c )
+void gl_renderTriangleEmpty( double x, double y, double a, double s, double length, const glColour *c, double thickness )
 {
    gl_Matrix4 projection;
+
+   glLineWidth( thickness );
 
    projection = gl_Matrix4_Translate(gl_view_matrix, x, y, 0);
    if (a != 0.)
@@ -186,6 +179,8 @@ void gl_renderTriangleEmpty( double x, double y, double a, double s, double leng
    gl_vboActivateAttribOffset( gl_triangleVBO, shaders.solid.vertex, 0, 2, GL_FLOAT, 0 );
    glDrawArrays( GL_LINE_STRIP, 0, 4 );
    gl_endSolidProgram();
+
+   glLineWidth( 1. );
 }
 
 
@@ -211,7 +206,7 @@ void gl_blitTexture(  const glTexture* texture,
       const double tw, const double th, const glColour *c, const double angle )
 {
    // Half width and height
-   double hw, hh; 
+   double hw, hh;
    gl_Matrix4 projection, tex_mat;
 
    glUseProgram(shaders.texture.program);
@@ -722,25 +717,27 @@ void gl_drawCircle( const double cx, const double cy,
  *    @param x2 X position of the second point in screen coordinates.
  *    @param y2 Y position of the second point in screen coordinates.
  *    @param c Colour to use.
+ *    @param thickness Thickness to use.
  */
 void gl_drawLine( const double x1, const double y1,
-      const double x2, const double y2, const glColour *c )
+      const double x2, const double y2, const glColour *c,
+      const double thickness )
 {
    gl_Matrix4 projection;
    double a, s;
 
    a = atan2( y2-y1, x2-x1 );
-   s = sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
+   s = sqrt( pow2(x2-x1) + pow2(y2-y1) );
 
    projection = gl_view_matrix;
 
    projection = gl_Matrix4_Translate(projection, x1, y1, 0);
    projection = gl_Matrix4_Rotate2d(projection, a);
-   projection = gl_Matrix4_Scale(projection, s, s, 1);
+   projection = gl_Matrix4_Scale(projection, s, thickness, 1);
 
    gl_beginSolidProgram(projection, c);
    gl_vboActivateAttribOffset( gl_lineVBO, shaders.solid.vertex, 0, 2, GL_FLOAT, 0 );
-   glDrawArrays( GL_LINES, 0, 2 );
+   glDrawArrays( GL_TRIANGLE_STRIP, 0, 4 );
    gl_endSolidProgram();
 }
 
@@ -801,6 +798,16 @@ int gl_initRender (void)
    gl_squareVBO = gl_vboCreateStatic( sizeof(GLfloat) * 8, vertex );
 
    vertex[0] = 0.;
+   vertex[1] = -0.5;
+   vertex[2] = 1.;
+   vertex[3] = -0.5;
+   vertex[4] = 0.;
+   vertex[5] = 0.5;
+   vertex[6] = 1.;
+   vertex[7] = 0.5;
+   gl_lineVBO = gl_vboCreateStatic( sizeof(GLfloat) * 8, vertex );
+
+   vertex[0] = 0.;
    vertex[1] = 0.;
    vertex[2] = 1.;
    vertex[3] = 0.;
@@ -811,22 +818,6 @@ int gl_initRender (void)
    vertex[8] = 0.;
    vertex[9] = 0.;
    gl_squareEmptyVBO = gl_vboCreateStatic( sizeof(GLfloat) * 8, vertex );
-
-   vertex[0] = 0.;
-   vertex[1] = -1.;
-   vertex[2] = 0.;
-   vertex[3] = 1.;
-   vertex[4] = -1.;
-   vertex[5] = 0.;
-   vertex[6] = 1.;
-   vertex[7] = 0.;
-   gl_crossVBO = gl_vboCreateStatic( sizeof(GLfloat) * 8, vertex );
-
-   vertex[0] = 0.;
-   vertex[1] = 0.;
-   vertex[2] = 1.;
-   vertex[3] = 0.;
-   gl_lineVBO = gl_vboCreateStatic( sizeof(GLfloat) * 4, vertex );
 
    vertex[0] = 0.5*cos(4.*M_PI/3.);
    vertex[1] = 0.5*sin(4.*M_PI/3.);
@@ -852,9 +843,8 @@ void gl_exitRender (void)
    /* Destroy the VBO. */
    gl_vboDestroy( gl_renderVBO );
    gl_vboDestroy( gl_squareVBO );
-   gl_vboDestroy( gl_squareEmptyVBO );
-   gl_vboDestroy( gl_crossVBO );
    gl_vboDestroy( gl_lineVBO );
+   gl_vboDestroy( gl_squareEmptyVBO );
    gl_vboDestroy( gl_triangleVBO );
    gl_renderVBO = NULL;
 }
