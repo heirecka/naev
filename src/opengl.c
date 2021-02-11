@@ -78,6 +78,61 @@ static int gl_setupScaling (void);
 static int gl_hint (void);
 
 
+#if DEBUGGING
+static void gl_messageCallback( GLenum source,
+      GLenum type, GLuint id, GLenum severity, GLsizei length,
+      const GLchar* message, const void* userParam )
+{
+   (void) id;
+   (void) length;
+   (void) userParam;
+   const char *str_source, *str_type, *str_severity;
+
+   if (source==GL_DEBUG_SOURCE_API)
+      str_source = _("API");
+   else if (source==GL_DEBUG_SOURCE_WINDOW_SYSTEM)
+      str_source = _("window-system");
+   else if (source==GL_DEBUG_SOURCE_API)
+      str_source = _("shader compiler");
+   else if (source==GL_DEBUG_SOURCE_API)
+      str_source = _("third party");
+   else if (source==GL_DEBUG_SOURCE_API)
+      str_source = _("application");
+   else if (source==GL_DEBUG_SOURCE_API)
+      str_source = _("other");
+
+   if (type==GL_DEBUG_TYPE_ERROR)
+      str_type = _("** ERROR **");
+   else if (type==GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR)
+      str_type = _("undefined behaviour");
+   else if (type==GL_DEBUG_TYPE_PORTABILITY)
+      str_type = _("portability");
+   else if (type==GL_DEBUG_TYPE_PERFORMANCE)
+      str_type = _("performance");
+   else if (type==GL_DEBUG_TYPE_MARKER)
+      str_type = _("marker");
+   else if (type==GL_DEBUG_TYPE_PUSH_GROUP)
+      str_type = _("push group");
+   else if (type==GL_DEBUG_TYPE_POP_GROUP)
+      str_type = _("pop group");
+   else if (type==GL_DEBUG_TYPE_OTHER)
+      str_type = _("other");
+
+   if (severity==GL_DEBUG_SEVERITY_HIGH)
+      str_severity = _("High");
+   else if (severity==GL_DEBUG_SEVERITY_MEDIUM)
+      str_severity = _("Medium");
+   else if (severity==GL_DEBUG_SEVERITY_LOW)
+      str_severity = _("Low");
+   else if (severity==GL_DEBUG_SEVERITY_NOTIFICATION)
+      str_severity = _("Notification");
+
+   WARN( _("GL CALLBACK: source='%s' type='%s', severity='%s'\n%s"),
+         str_source, str_type, str_severity, message );
+}
+#endif /* DEBUGGING */
+
+
 /*
  *
  * M I S C
@@ -462,8 +517,15 @@ int gl_init (void)
    if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
       ERR("Unable to load OpenGL using GLAD");
 
-   if ( !GLAD_GL_VERSION_3_1 )
+   /* Check version. */
+   if (!GLAD_GL_VERSION_3_1)
       WARN( "Naev requires OpenGL 3.1, but got OpenGL %d.%d!", GLVersion.major, GLVersion.minor );
+
+   /* Start logging. */
+#if DEBUGGING
+   glEnable( GL_DEBUG_OUTPUT );
+   glDebugMessageCallback( gl_messageCallback, NULL );
+#endif /* DEBUGGING */
 
    /* Some OpenGL options. */
    glClearColor( 0., 0., 0., 1. );
