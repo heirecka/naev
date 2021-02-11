@@ -155,7 +155,6 @@ static GLuint gl_shader_compile( GLuint type, const char *buf,
       free(log);
       shader = 0;
    }
-   gl_checkErr();
    return shader;
 }
 
@@ -266,8 +265,6 @@ static GLuint gl_program_make( GLuint vertex_shader, GLuint fragment_shader )
 
    glDeleteShader(vertex_shader);
    glDeleteShader(fragment_shader);
-
-   gl_checkErr();
 
    return program;
 }

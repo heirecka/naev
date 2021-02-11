@@ -129,12 +129,6 @@ int gl_setupFullscreen (void);
 GLint gl_stringToFilter( const char *s );
 GLint gl_stringToClamp( const char *s );
 void gl_screenshot( const char *filename );
-#ifdef DEBUGGING
-#define gl_checkErr()   gl_checkHandleError( __func__, __LINE__ )
-void gl_checkHandleError( const char *func, int line );
-#else /* DEBUGGING */
-#define gl_checkErr() /**< Hack to ignore errors when debugging. */
-#endif /* DEBUGGING */
 
 
 #endif /* OPENGL_H */

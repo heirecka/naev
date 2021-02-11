@@ -171,9 +171,6 @@ void gl_screenshot( const char *filename )
    else
       IMG_SavePNG_RW( surface, rw, 1 );
 
-   /* Check to see if an error occurred. */
-   gl_checkErr();
-
    /* Free memory. */
    SDL_FreeSurface( surface );
 }
@@ -197,47 +194,6 @@ GLboolean gl_hasVersion( int major, int minor )
       return GL_TRUE;
    return GL_FALSE;
 }
-
-
-#ifdef DEBUGGING
-/**
- * @brief Checks and reports if there's been an error.
- */
-void gl_checkHandleError( const char *func, int line )
-{
-   GLenum err;
-   const char* errstr;
-
-   err = glGetError();
-
-   /* No error. */
-   if (err == GL_NO_ERROR)
-      return;
-
-   switch (err) {
-      case GL_INVALID_ENUM:
-         errstr = _("GL invalid enum");
-         break;
-      case GL_INVALID_VALUE:
-         errstr = _("GL invalid value");
-         break;
-      case GL_INVALID_OPERATION:
-         errstr = _("GL invalid operation");
-         break;
-      case GL_INVALID_FRAMEBUFFER_OPERATION:
-         errstr = _("GL invalid framebuffer operation");
-         break;
-      case GL_OUT_OF_MEMORY:
-         errstr = _("GL out of memory");
-         break;
-
-      default:
-         errstr = _("GL unknown error");
-         break;
-   }
-   WARN(_("OpenGL error [%s:%d]: %s"), func, line, errstr);
-}
-#endif /* DEBUGGING */
 
 
 /**
@@ -538,7 +494,6 @@ int gl_init (void)
 
    /* Finishing touches. */
    glClear( GL_COLOR_BUFFER_BIT ); /* must clear the buffer first */
-   gl_checkErr();
 
    /* Start hinting. */
    gl_hint();
@@ -573,8 +528,6 @@ void gl_resize (void)
    glViewport( 0, 0, gl_screen.rw, gl_screen.rh );
    gl_setDefViewport( 0, 0, gl_screen.nw, gl_screen.nh );
    gl_defViewport();
-
-   gl_checkErr();
 }
 
 /**

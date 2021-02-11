@@ -94,9 +94,6 @@ static gl_vbo* gl_vboCreate( GLenum target, GLsizei size, void* data, GLenum usa
    glBufferData( target, size, data, usage );
    glBindBuffer( target, 0 );
 
-   /* Check for errors. */
-   gl_checkErr();
-
    return vbo;
 }
 
@@ -127,9 +124,6 @@ void gl_vboData( gl_vbo *vbo, GLsizei size, void* data )
    /* Get new data. */
    glBindBuffer( GL_ARRAY_BUFFER, vbo->id );
    glBufferData( GL_ARRAY_BUFFER, size, data, usage );
-
-   /* Check for errors. */
-   gl_checkErr();
 }
 
 
@@ -145,9 +139,6 @@ void gl_vboSubData( gl_vbo *vbo, GLint offset, GLsizei size, void* data )
 {
    glBindBuffer( GL_ARRAY_BUFFER, vbo->id );
    glBufferSubData( GL_ARRAY_BUFFER, offset, size, data );
-
-   /* Check for errors. */
-   gl_checkErr();
 }
 
 
@@ -163,9 +154,6 @@ gl_vbo* gl_vboCreateStream( GLsizei size, void* data )
 
    vbo = gl_vboCreate( GL_ARRAY_BUFFER, size, data, GL_STREAM_DRAW );
    vbo->type = NGL_VBO_STREAM;
-
-   /* Check for errors. */
-   gl_checkErr();
 
    return vbo;
 }
@@ -183,9 +171,6 @@ gl_vbo* gl_vboCreateDynamic( GLsizei size, void* data )
    vbo = gl_vboCreate( GL_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW );
    vbo->type = NGL_VBO_DYNAMIC;
 
-   /* Check for errors. */
-   gl_checkErr();
-
    return vbo;
 }
 
@@ -202,9 +187,6 @@ gl_vbo* gl_vboCreateStatic( GLsizei size, void* data )
 
    vbo = gl_vboCreate( GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW );
    vbo->type = NGL_VBO_STATIC;
-
-   /* Check for errors. */
-   gl_checkErr();
 
    return vbo;
 }
@@ -232,9 +214,6 @@ void gl_vboUnmap( gl_vbo *vbo )
 {
    (void) vbo;
    glUnmapBuffer( GL_ARRAY_BUFFER );
-
-   /* Check for errors. */
-   gl_checkErr();
 }
 
 
@@ -258,9 +237,6 @@ void gl_vboActivateAttribOffset( gl_vbo *vbo, GLuint index, GLuint offset,
    pointer = BUFFER_OFFSET(offset);
 
    glVertexAttribPointer( index, size, type, GL_FALSE, stride, pointer );
-
-   /* Check for errors. */
-   gl_checkErr();
 }
 
 
@@ -275,6 +251,5 @@ void gl_vboDestroy( gl_vbo *vbo )
       return;
 
    glDeleteBuffers( 1, &vbo->id );
-   gl_checkErr();
    free(vbo);
 }

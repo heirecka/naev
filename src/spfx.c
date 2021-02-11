@@ -690,9 +690,6 @@ static void spfx_trail_draw( const Trail_spfx* trail )
    /* Clear state. */
    glDisableVertexAttribArray( shaders.trail.vertex );
    glUseProgram(0);
-
-   /* Check errors. */
-   gl_checkErr();
 }
 
 

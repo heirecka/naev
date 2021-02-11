@@ -185,8 +185,6 @@ static int shaderL_new( lua_State *L )
    ATTRIB( VertexColor );
    ATTRIB( ConstantColor );
 
-   gl_checkErr();
-
    lua_pushshader( L, shader );
    return 1;
 }

@@ -695,7 +695,6 @@ void main_loop( int update )
    /* Clear buffer. */
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    render_all();
-   gl_checkErr(); /* check error every loop */
    /* Draw buffer. */
    SDL_GL_SwapWindow( gl_screen.window );
 }

@@ -72,7 +72,6 @@ void gl_endSolidProgram (void)
 {
    glDisableVertexAttribArray(shaders.solid.vertex);
    glUseProgram(0);
-   gl_checkErr();
 }
 
 
@@ -88,7 +87,6 @@ void gl_endSmoothProgram() {
    glDisableVertexAttribArray(shaders.smooth.vertex);
    glDisableVertexAttribArray(shaders.smooth.vertex_color);
    glUseProgram(0);
-   gl_checkErr();
 }
 
 
@@ -257,9 +255,6 @@ void gl_blitTexture(  const glTexture* texture,
    /* Clear state. */
    glDisableVertexAttribArray( shaders.texture.vertex );
 
-   /* anything failed? */
-   gl_checkErr();
-
    glUseProgram(0);
 }
 
@@ -345,9 +340,6 @@ void gl_blitTextureInterpolate(  const glTexture* ta,
    /* Clear state. */
    glDisableVertexAttribArray( shaders.texture_interpolate.vertex );
    glActiveTexture( GL_TEXTURE0 );
-
-   /* anything failed? */
-   gl_checkErr();
 
    glUseProgram(0);
 }
@@ -658,9 +650,6 @@ static void gl_drawCircleEmpty( const double cx, const double cy,
    /* Clear state. */
    glDisableVertexAttribArray( shaders.circle.vertex );
    glUseProgram(0);
-
-   /* Check errors. */
-   gl_checkErr();
 }
 
 static void gl_drawCircleFilled( const double cx, const double cy,
@@ -689,9 +678,6 @@ static void gl_drawCircleFilled( const double cx, const double cy,
    /* Clear state. */
    glDisableVertexAttribArray( shaders.circle_filled.vertex );
    glUseProgram(0);
-
-   /* Check errors. */
-   gl_checkErr();
 }
 
 /**
@@ -836,8 +822,6 @@ int gl_initRender (void)
    vertex[6] = vertex[0];
    vertex[7] = vertex[1];
    gl_triangleVBO = gl_vboCreateStatic( sizeof(GLfloat) * 8, vertex );
-
-   gl_checkErr();
 
    return 0;
 }

@@ -475,7 +475,6 @@ static int texL_setFilter( lua_State *L )
    glBindTexture( GL_TEXTURE_2D, tex->texture );
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag );
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min );
-   gl_checkErr();
 
    return 0;
 }
@@ -509,7 +508,6 @@ static int texL_setWrap( lua_State *L )
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, horiz );
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, vert );
    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, depth );
-   gl_checkErr();
 
    return 0;
 }

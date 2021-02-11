@@ -276,9 +276,6 @@ static int gl_fontAddGlyphTex( glFontStash *stsh, font_char_t *ch, glFontGlyph *
       glTexImage2D( GL_TEXTURE_2D, 0, GL_RED, stsh->tw, stsh->th, 0,
             GL_RED, GL_UNSIGNED_BYTE, NULL );
 
-      /* Check for errors. */
-      gl_checkErr();
-
       /* Create a new entry at the beginning of the first row with our target height. */
       gr = &tex->rows[0];
       gr->h = ch->h;
@@ -293,9 +290,6 @@ static int gl_fontAddGlyphTex( glFontStash *stsh, font_char_t *ch, glFontGlyph *
    else
       glTexSubImage2D( GL_TEXTURE_2D, 0, gr->x, gr->y, ch->w, ch->h,
             GL_RED, GL_UNSIGNED_BYTE, ch->data );
-
-   /* Check for error. */
-   gl_checkErr();
 
    /* Update VBOs. */
    stsh->nvbo++;
@@ -1404,9 +1398,6 @@ static void gl_fontRenderEnd (void)
    glDisableVertexAttribArray( shaders.font.vertex );
    glDisableVertexAttribArray( shaders.font.tex_coord );
    glUseProgram(0);
-
-   /* Check for errors. */
-   gl_checkErr();
 }
 
 
@@ -1431,8 +1422,6 @@ void gl_fontSetFilter( const glFont *ft_font, GLint min, GLint mag )
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, stsh->magfilter);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, stsh->minfilter);
    }
-
-   gl_checkErr();
 }
 
 

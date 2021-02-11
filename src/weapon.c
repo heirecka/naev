@@ -679,9 +679,6 @@ static void weapon_renderBeam( Weapon* w, const double dt ) {
    /* Clear state. */
    glDisableVertexAttribArray( shaders.beam.vertex );
    glUseProgram(0);
-
-   /* anything failed? */
-   gl_checkErr();
 }
 
 

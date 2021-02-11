@@ -186,9 +186,6 @@ static GLuint gl_texParameters( unsigned int flags )
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-   /* Check errors. */
-   gl_checkErr();
-
    return texture;
 }
 
@@ -230,9 +227,6 @@ glTexture* gl_loadImageData( float *data, int w, int h, int sx, int sy )
 
    /* Copy over. */
    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_FLOAT, data );
-
-   /* Check errors. */
-   gl_checkErr();
 
    /* Set up values. */
    texture->sw    = texture->w / texture->sx;
@@ -290,7 +284,6 @@ static GLuint gl_loadSurface( SDL_Surface* surface, unsigned int flags, int free
    /* cleanup */
    if (freesur)
       SDL_FreeSurface( surface );
-   gl_checkErr();
 
    return texture;
 }
@@ -758,8 +751,6 @@ void gl_freeTexture( glTexture* texture )
    free(texture->trans);
    free(texture->name);
    free(texture);
-
-   gl_checkErr();
 }
 
 

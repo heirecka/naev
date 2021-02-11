@@ -158,7 +158,6 @@ static void nebu_renderBackground( const double dt )
 
    /* Clean up. */
    glDisableVertexAttribArray( shaders.nebula_background.vertex );
-   gl_checkErr();
    glUseProgram(0);
 }
 
@@ -255,8 +254,6 @@ void nebu_renderOverlay( const double dt )
    /* Reset puff movement. */
    puff_x = 0.;
    puff_y = 0.;
-
-   gl_checkErr();
 }
 
 

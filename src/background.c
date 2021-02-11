@@ -221,9 +221,6 @@ void background_renderStars( const double dt )
    glLineWidth(1 / gl_screen.scale);
 
    glUseProgram(0);
-
-   /* Check for errors. */
-   gl_checkErr();
 }
 
 
