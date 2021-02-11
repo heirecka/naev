@@ -92,13 +92,13 @@ static void gl_messageCallback( GLenum source,
       str_source = _("API");
    else if (source==GL_DEBUG_SOURCE_WINDOW_SYSTEM)
       str_source = _("window-system");
-   else if (source==GL_DEBUG_SOURCE_API)
+   else if (source==GL_DEBUG_SOURCE_SHADER_COMPILER)
       str_source = _("shader compiler");
-   else if (source==GL_DEBUG_SOURCE_API)
+   else if (source==GL_DEBUG_SOURCE_THIRD_PARTY)
       str_source = _("third party");
-   else if (source==GL_DEBUG_SOURCE_API)
+   else if (source==GL_DEBUG_SOURCE_APPLICATION)
       str_source = _("application");
-   else if (source==GL_DEBUG_SOURCE_API)
+   else if (source==GL_DEBUG_SOURCE_OTHER)
       str_source = _("other");
 
    if (type==GL_DEBUG_TYPE_ERROR)
@@ -127,7 +127,7 @@ static void gl_messageCallback( GLenum source,
    else if (severity==GL_DEBUG_SEVERITY_NOTIFICATION)
       str_severity = _("Notification");
 
-   WARN( _("GL CALLBACK: source='%s' type='%s', severity='%s'\n%s"),
+   WARN( _("source='%s' type='%s', severity='%s'\n%s"),
          str_source, str_type, str_severity, message );
 }
 #endif /* DEBUGGING */
